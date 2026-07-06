@@ -386,11 +386,12 @@ function renderTabsAulas(){
 function selAula(btn){document.querySelectorAll('#tabsAulas button').forEach(function(b){b.classList.remove('activo')});btn.classList.add('activo');aulaAct=btn.dataset.aula;renderGrilla()}
 
 function renderGrilla(){
-  var ed=document.getElementById('selEdificio').value;
-  var info=DATA.aulas.find(function(a){return a.edificio===ed&&a.aula===aulaAct});
-  document.getElementById('infoAula').innerHTML=info
-    ?'📐 Capacidad: <b>'+(info.capacidad||'—')+'</b> · Aire: <b>'+(info.aire||'No')+'</b>'+(info.largo?' · Medidas: <b>'+info.largo+' × '+info.ancho+' m</b>':'')
-    :'';
+ var ed = document.getElementById('selEdificio').value;
+var info = DATA.aulas.find(function(a) { return a.edificio === ed && a.aula === aulaAct; });
+
+document.getElementById('infoAula').innerHTML = info
+  ? '📐 Capacidad: <b>' + (info.capacidad || '—') + '</b> · Aire: <b>' + (info.aire || 'No') + '</b>' + (info.largo ? ' · Medidas: <b>' + info.largo + ' × ' + info.ancho + ' m</b>' : '')
+  : '';
   var mapa={};DATA.horarios.forEach(function(h){if(h.edificio===ed&&h.aula===aulaAct)mapa[h.dia+'|'+h.horario]=h});
   var ed_ok=esAdmin();
   var html='<tr><th>HORARIO</th>'+DIAS.map(function(d){return'<th>'+d+'</th>'}).join('')+'</tr>';
@@ -483,15 +484,30 @@ async function borrarRes(id){
 }
 
 // ===== AULAS =====
-function renderAulas(){
-  var cur='';
-  var sorted=DATA.aulas.slice().sort(function(a,b){return a.edificio.localeCompare(b.edificio)||String(a.aula).localeCompare(String(b.aula))});
-  var html='<tr><th>Edificio</th><th>Aula</th><th> style="color:var(--dorado)">Capacidad</th><th>Aire</th><th>';
-  sorted.forEach(function(a){
-    var ne=a.edificio!==cur;cur=a.edificio;
-    html+='<tr'+(ne?' style="border-top:2px solid var(--vc)"':'')+'><td>'+(ne?'<b style="color:var(--vc)">'+esc(a.edificio)+'</b>':'')+'</td><td>'+esc(a.aula)+'</td><td>'+'</td><td><b style="color:var(--dorado);font-size:14px">'+esc(a.capacidad)+'</b></td><td>'+(a.aire?'❄️ Sí':'—')+'</td><td>'+(a.largo?esc(a.largo)+' × '+esc(a.ancho)+' m':'—')+'</td></tr>';
+function renderAulas() {
+  var cur = '';
+  var sorted = DATA.aulas.slice().sort(function(a, b) {
+    return a.edificio.localeCompare(b.edificio) || String(a.aula).localeCompare(String(b.aula));
   });
-  document.getElementById('tablaAulas').innerHTML=html;
+  
+  // Se elimina la columna <th>Bancos</th>
+  var html = '<tr><th>Edificio</th><th>Aula</th><th style="color:var(--dorado)">Capacidad</th><th>Aire</th><th>Medidas</th></tr>';
+  
+  sorted.forEach(function(a) {
+    var ne = a.edificio !== cur; 
+    cur = a.edificio;
+    
+    // Se elimina por completo el <td> de los bancos para no alterar el orden de la tabla
+    html += '<tr' + (ne ? ' style="border-top:2px solid var(--vc)"' : '') + '>' +
+              '<td>' + (ne ? '<b style="color:var(--vc)">' + esc(a.edificio) + '</b>' : '') + '</td>' +
+              '<td>' + esc(a.aula) + '</td>' +
+              '<td><b style="color:var(--dorado);font-size:14px">' + esc(a.capacidad) + '</b></td>' +
+              '<td>' + (a.aire ? '❄️ Sí' : '—') + '</td>' +
+              '<td>' + (a.largo ? esc(a.largo) + ' × ' + esc(a.ancho) + ' m' : '—') + '</td>' +
+            '</tr>';
+  });
+  
+  document.getElementById('tablaAulas').innerHTML = html;
 }
 
 // ===== REGISTRO =====
