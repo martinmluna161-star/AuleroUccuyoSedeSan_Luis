@@ -389,7 +389,7 @@ function renderGrilla(){
   var ed=document.getElementById('selEdificio').value;
   var info=DATA.aulas.find(function(a){return a.edificio===ed&&a.aula===aulaAct});
   document.getElementById('infoAula').innerHTML=info
-    ?'📐 Capacidad: <b>'+(info.capacidad||'—')+'</b> · Bancos: <b>'+(info.bancos||'—')+'</b> · Aire: <b>'+(info.aire||'No')+'</b>'+(info.largo?' · Medidas: <b>'+info.largo+' × '+info.ancho+' m</b>':'')
+    ?'📐 Capacidad: <b>'+(info.capacidad||'—')+'</b> · Aire: <b>'+(info.aire||'No')+'</b>'+(info.largo?' · Medidas: <b>'+info.largo+' × '+info.ancho+' m</b>':'')
     :'';
   var mapa={};DATA.horarios.forEach(function(h){if(h.edificio===ed&&h.aula===aulaAct)mapa[h.dia+'|'+h.horario]=h});
   var ed_ok=esAdmin();
@@ -486,10 +486,10 @@ async function borrarRes(id){
 function renderAulas(){
   var cur='';
   var sorted=DATA.aulas.slice().sort(function(a,b){return a.edificio.localeCompare(b.edificio)||String(a.aula).localeCompare(String(b.aula))});
-  var html='<tr><th>Edificio</th><th>Aula</th><th>Bancos</th><th style="color:var(--dorado)">Capacidad</th><th>Aire</th><th>Medidas</th></tr>';
+  var html='<tr><th>Edificio</th><th>Aula</th><th> style="color:var(--dorado)">Capacidad</th><th>Aire</th><th>';
   sorted.forEach(function(a){
     var ne=a.edificio!==cur;cur=a.edificio;
-    html+='<tr'+(ne?' style="border-top:2px solid var(--vc)"':'')+'><td>'+(ne?'<b style="color:var(--vc)">'+esc(a.edificio)+'</b>':'')+'</td><td>'+esc(a.aula)+'</td><td>'+esc(a.bancos)+'</td><td><b style="color:var(--dorado);font-size:14px">'+esc(a.capacidad)+'</b></td><td>'+(a.aire?'❄️ Sí':'—')+'</td><td>'+(a.largo?esc(a.largo)+' × '+esc(a.ancho)+' m':'—')+'</td></tr>';
+    html+='<tr'+(ne?' style="border-top:2px solid var(--vc)"':'')+'><td>'+(ne?'<b style="color:var(--vc)">'+esc(a.edificio)+'</b>':'')+'</td><td>'+esc(a.aula)+'</td><td>'+'</td><td><b style="color:var(--dorado);font-size:14px">'+esc(a.capacidad)+'</b></td><td>'+(a.aire?'❄️ Sí':'—')+'</td><td>'+(a.largo?esc(a.largo)+' × '+esc(a.ancho)+' m':'—')+'</td></tr>';
   });
   document.getElementById('tablaAulas').innerHTML=html;
 }
