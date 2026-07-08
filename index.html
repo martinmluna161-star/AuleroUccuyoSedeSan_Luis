@@ -244,10 +244,8 @@ function pad(n){return(n<10?'0':'')+n}
 var DATA=null, ADMIN_HASH=null, slotActual=null;
 
 // ===== SHA-256 =====
-async function sha256(str){
-  var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
-}
+// Clave se envía directo al server (comparación server-side, conexión HTTPS)
+async function sha256(str){ return str; }
 
 // ===== API =====
 async function apiGet(params){
